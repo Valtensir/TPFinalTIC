@@ -515,12 +515,12 @@ float perturbacao2(Dados dados){
     float FOPerturbacao = 0;
     srand(time(NULL));
 
-    num1 = rand() % dados.qtdCidades;
-    num2 = rand() % dados.qtdCidades;
-    num3 = rand() % dados.qtdCidades;
-    num4 = rand() % dados.qtdCidades;
-    num5 = rand() % dados.qtdCidades;
-    num6 = rand() % dados.qtdCidades;
+    num1 = rand() % 10;
+    num2 = num1 + rand() % 5;
+    num3 = num2 + rand() % 5;
+    num4 = num3 + rand() % 5;
+    num5 = num4 + rand() % 5;
+    num6 = num5 + rand() % 5;
 	
     aux = dados.vetSolucaoStar[num6];
     dados.vetSolucaoStar[num6] = dados.vetSolucaoStar[num5];
@@ -544,12 +544,12 @@ float perturbacao3(Dados dados){
     float FOPerturbacao = 0;
     srand(time(NULL));
 
-    num1 = rand() % dados.qtdCidades;
-    num2 = rand() % dados.qtdCidades;
-    num3 = rand() % dados.qtdCidades;
-    num4 = rand() % dados.qtdCidades;
-    num5 = rand() % dados.qtdCidades;
-    num6 = rand() % dados.qtdCidades;
+    num1 = rand() % 10;
+    num2 = num1 + rand() % 5;
+    num3 = num2 + rand() % 5;
+    num4 = num3 + rand() % 5;
+    num5 = num4 + rand() % 5;
+    num6 = num5 + rand() % 5;
 
     aux = dados.vetSolucaoStar[num1];
     dados.vetSolucaoStar[num1] = dados.vetSolucaoStar[num2];
