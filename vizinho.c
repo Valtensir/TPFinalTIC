@@ -10,37 +10,31 @@ typedef struct
     int *vetSolucao;
     float distTotal;
     int *vetSolucaoStar;
+    int *vetPreco;
+    int *vetPenalidade;
 
 } Dados;
 
 int i,j;
 
-void lerCoordenadas(int** matrizCoordenadas, int qtdCidades, FILE* arq2, int aux){
-    for (i = 0; i < qtdCidades; i++)
+void lerDados(Dados dados, FILE* arq, int aux){
+    for (i = 0; i < dados.qtdCidades; i++)
+    {
+        
+        fscanf(arq, "%d", &dados.vetPreco[i]);
+    }
+    for (i = 0; i < dados.qtdCidades; i++)
+    {
+        fscanf(arq, "%d", &dados.vetPenalidade[i]);
+    }
+    for (i = 0; i < dados.qtdCidades; i++)
+    {
+        dados.matrizDistancia[i] = (float *)malloc(dados.qtdCidades * sizeof(float));
+        for (j = 0; j < dados.qtdCidades; ++j)
         {
-            matrizCoordenadas[i] = (int *)malloc(2 * sizeof(int));
-            fscanf(arq2, "%d", &aux);
-
-            for (j = 0; j < 2; j++)
-            {
-                fscanf(arq2, "%d", &matrizCoordenadas[i][j]);
-            }
+            fscanf(arq, "%f", &dados.matrizDistancia[i][j]);
         }
-}
-
-void preencheMatrizDistancia(int** matrizCoordenadas, int qtdCidades, int* selecionada, float** matrizDistancia, float x, float y){
-    for (i = 0; i < qtdCidades; i++)
-        {
-            matrizDistancia[i] = (float *)malloc(qtdCidades * sizeof(int));
-            selecionada[i] = 0;
-            for (j = 0; j < qtdCidades; j++)
-            {
-                x = matrizCoordenadas[i][0] - matrizCoordenadas[j][0];
-                y = matrizCoordenadas[i][1] - matrizCoordenadas[j][1];
-
-                matrizDistancia[i][j] = sqrt(pow(x, 2) + pow(y, 2));
-            }
-        }
+    }
 }
 
 float vizinhoMaisProximo(int inicio, int l, Dados dados, int* selecionada, float FOStar){
@@ -195,8 +189,7 @@ float doisOptBest(Dados dados, float FOStar){
                         FOmelhorvizinho = FOvizinho;
                         ref1 = i;
                         ref2 = j;
-//                        i = dados.qtdCidades;
-//                        j = dados.qtdCidades;
+
                     }
                 }
             }
@@ -515,12 +508,12 @@ float perturbacao2(Dados dados){
     float FOPerturbacao = 0;
     srand(time(NULL));
 
-    num1 = rand() % 10;
-    num2 = num1 + rand() % 5;
-    num3 = num2 + rand() % 5;
-    num4 = num3 + rand() % 5;
-    num5 = num4 + rand() % 5;
-    num6 = num5 + rand() % 5;
+    num1 = rand() % dados.qtdCidades / 2;
+    num2 = num1 + rand() % 3;
+    num3 = num2 + rand() % 3;
+    num4 = num3 + rand() % 3;
+    num5 = num4 + rand() % 3;
+    num6 = num5 + rand() % 3;
 	
     aux = dados.vetSolucaoStar[num6];
     dados.vetSolucaoStar[num6] = dados.vetSolucaoStar[num5];
@@ -544,12 +537,12 @@ float perturbacao3(Dados dados){
     float FOPerturbacao = 0;
     srand(time(NULL));
 
-    num1 = rand() % 10;
-    num2 = num1 + rand() % 5;
-    num3 = num2 + rand() % 5;
-    num4 = num3 + rand() % 5;
-    num5 = num4 + rand() % 5;
-    num6 = num5 + rand() % 5;
+    num1 = rand() % dados.qtdCidades / 2;
+    num2 = num1 + rand() % 3;
+    num3 = num2 + rand() % 3;
+    num4 = num3 + rand() % 3;
+    num5 = num4 + rand() % 3;
+    num6 = num5 + rand() % 3;
 
     aux = dados.vetSolucaoStar[num1];
     dados.vetSolucaoStar[num1] = dados.vetSolucaoStar[num2];
@@ -702,16 +695,15 @@ int main(int argc, char *argv[ ])
     int aux, inicio,  k, c = 0, iter = 0, buscaLocal;
     float distancia, FOStar = 99999999, solucaoOtima,x, y, FOStarMulti = 9999999, alfa = 0.1, FOdeS, FOPerturbacao;
     int *melhorSolucaoMulti;
-    int **matrizCoordenadas;
     int *solucaoUm;
     int *selecionada;
+
     clock_t comeco, fim;
     double tempo;
 
-    arq = fopen(argv[1], "r");
-    arq2 = fopen(argv[2], "r");
+    arq = fopen("Instancias/v10.txt", "r");
 
-    if (arq == NULL || arq2 == NULL)
+    if (arq == NULL)
     {
         printf("Erro ao ler arquivo \n");
     }
@@ -719,20 +711,19 @@ int main(int argc, char *argv[ ])
     {
         // lê o arquivo com a quantidade de cidades e a solução ótima
         fscanf(arq, "%d", &dados.qtdCidades);
-        fscanf(arq, "%f", &solucaoOtima);
 
-        dados.matrizDistancia = (float **)malloc(dados.qtdCidades * sizeof(int *));
-        matrizCoordenadas = (int **)malloc(dados.qtdCidades * sizeof(int *));
+        dados.matrizDistancia = (float **)malloc(dados.qtdCidades * sizeof(float *));
         dados.vetSolucao = (int *)malloc(dados.qtdCidades * sizeof(int));
         selecionada = (int *)malloc(dados.qtdCidades * sizeof(int));
         dados.vetSolucaoStar = (int *)malloc(dados.qtdCidades * sizeof(int));
         melhorSolucaoMulti = (int *)malloc(dados.qtdCidades * sizeof(int));
         solucaoUm = (int *)malloc(dados.qtdCidades * sizeof(int));
+        dados.vetPreco = (int *)malloc(dados.qtdCidades * sizeof(int));
+        dados.vetPenalidade = (int *)malloc(dados.qtdCidades * sizeof(int));
         dados.distTotal = 0;
 
         // lê as coordenadas e preenche a matriz de distância entre as cidades
-        lerCoordenadas(matrizCoordenadas,dados.qtdCidades,arq2,aux);
-        preencheMatrizDistancia(matrizCoordenadas,dados.qtdCidades,selecionada,dados.matrizDistancia,x,y);
+       lerDados(dados,arq,aux);
 
         comeco = clock();
         // for que percorre todas as cidades em busca da melhor solução
@@ -761,8 +752,8 @@ int main(int argc, char *argv[ ])
                 }
             }
 
-            /*//ILS
-           FOdeS = FOStarMulti;
+           //ILS
+            /*FOdeS = FOStarMulti;
 
             while(iter < 100)
             {
@@ -790,8 +781,6 @@ int main(int argc, char *argv[ ])
     printf("Tempo: %f\n", tempo);
     
     fclose(arq);
-    fclose(arq2);
-    free(matrizCoordenadas);
     free(selecionada);
     free(dados.matrizDistancia);
     free(dados.vetSolucao);
