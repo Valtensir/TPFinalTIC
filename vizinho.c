@@ -20,7 +20,7 @@ int i,j;
 void lerDados(Dados dados, FILE* arq, int aux){
     for (i = 0; i < dados.qtdCidades; i++)
     {
-        
+
         fscanf(arq, "%d", &dados.vetPreco[i]);
     }
     for (i = 0; i < dados.qtdCidades; i++)
@@ -466,7 +466,7 @@ float VND(Dados dados, float FOStarMulti, int* solucaoUm)
             default:
                 break;
         }
-    }  
+    }
     return FOStarMulti;
 }
 
@@ -514,7 +514,7 @@ float perturbacao2(Dados dados){
     num4 = num3 + rand() % 3;
     num5 = num4 + rand() % 3;
     num6 = num5 + rand() % 3;
-	
+
     aux = dados.vetSolucaoStar[num6];
     dados.vetSolucaoStar[num6] = dados.vetSolucaoStar[num5];
     dados.vetSolucaoStar[num5] = dados.vetSolucaoStar[num4];
@@ -563,7 +563,7 @@ float perturbacao3(Dados dados){
 
 float VNS(Dados dados, float FOStarMulti, int* solucaoUm){
     int buscaLocal = 1;
-	int melhora = 0, iter = 0;		
+	int melhora = 0, iter = 0;
     float FOVNS = 9999999;
 
 	while(buscaLocal <= 3){
@@ -579,7 +579,7 @@ float VNS(Dados dados, float FOStarMulti, int* solucaoUm){
 				while (iter < 10){
 					FOVNS = perturbacao1(dados);
 					FOVNS = VND(dados,FOVNS,solucaoUm);
-						
+
 					if(FOVNS < FOStarMulti){
 						FOStarMulti = FOVNS;
 						melhora = 1;
@@ -590,7 +590,7 @@ float VNS(Dados dados, float FOStarMulti, int* solucaoUm){
 							dados.vetSolucaoStar[i] = solucaoUm[i];
 						}
                         iter++;
-					}   
+					}
 				}
 				if(melhora == 1){
 					buscaLocal = 1;
@@ -598,7 +598,7 @@ float VNS(Dados dados, float FOStarMulti, int* solucaoUm){
 					buscaLocal++;
 				}
 				break;
-						
+
 			case 2:
 				iter = 0;
 				melhora = 0;
@@ -609,7 +609,7 @@ float VNS(Dados dados, float FOStarMulti, int* solucaoUm){
 				while (iter < 10){
 					FOVNS = perturbacao2(dados);
 					FOVNS = VND(dados,FOVNS,solucaoUm);
-						
+
 				    if(FOVNS < FOStarMulti)
                     {
 					    FOStarMulti = FOVNS;
@@ -630,7 +630,7 @@ float VNS(Dados dados, float FOStarMulti, int* solucaoUm){
 					buscaLocal++;
 				}
 				break;
-						
+
 			case 3:
 				iter = 0;
 			    melhora = 0;
@@ -642,7 +642,7 @@ float VNS(Dados dados, float FOStarMulti, int* solucaoUm){
                 {
 					FOVNS = perturbacao3(dados);
 					FOVNS = VND(dados,FOVNS,solucaoUm);
-						
+
 					if(FOVNS < FOStarMulti){
 						FOStarMulti = FOVNS;
 						melhora = 1;
@@ -661,11 +661,11 @@ float VNS(Dados dados, float FOStarMulti, int* solucaoUm){
 					buscaLocal++;
 				}
 				break;
-					
+
 			default:
                 buscaLocal++;
 				break;
-						
+
 		}
 	}
     return FOVNS;
@@ -693,7 +693,7 @@ int main(int argc, char *argv[ ])
     FILE *arq2;
     Dados dados;
     int aux, inicio,  k, c = 0, iter = 0, buscaLocal;
-    float distancia, FOStar = 99999999, solucaoOtima,x, y, FOStarMulti = 9999999, alfa = 0.1, FOdeS, FOPerturbacao;
+    float distancia, FOStar = 99999999, solucaoOtima,x, y, FOStarMulti = 9999999, alfa = 0.1, FOdeS, FOPerturbacao, premioMinimo = 0;
     int *melhorSolucaoMulti;
     int *solucaoUm;
     int *selecionada;
@@ -725,6 +725,12 @@ int main(int argc, char *argv[ ])
         // lê as coordenadas e preenche a matriz de distância entre as cidades
        lerDados(dados,arq,aux);
 
+       for (i=0; i< dados.qtdCidades;i++)
+       {
+           premioMinimo += dados.vetPreco[i];
+       }
+
+       premioMinimo *= 0.75; ///Premio minimo é 75% do premio total
         comeco = clock();
         // for que percorre todas as cidades em busca da melhor solução
         for (int l = 0; l < dados.qtdCidades; l++){
@@ -764,12 +770,12 @@ int main(int argc, char *argv[ ])
             }*/
 
             //FOStarMulti = VND(dados,FOStarMulti,solucaoUm);
-			
+
 			///VNS
             FOStarMulti = VNS(dados,FOStarMulti,solucaoUm);
-			
+
         }
-       
+
         fim = clock();
         tempo = (double)(fim - inicio)/(double)CLOCKS_PER_SEC;
     }
@@ -779,7 +785,7 @@ int main(int argc, char *argv[ ])
     printf("Solucao Otima: %f \n", solucaoOtima);
     printf("GAP: %f \n", (100*(FOStarMulti-solucaoOtima)/solucaoOtima));
     printf("Tempo: %f\n", tempo);
-    
+
     fclose(arq);
     free(selecionada);
     free(dados.matrizDistancia);
