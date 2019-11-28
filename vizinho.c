@@ -95,23 +95,27 @@ int vizinhoGRASP(int inicio, int l, Dados dados, int* selecionada, float FOStar,
 
     candidatos = (int *)malloc(dados.qtdCidades * sizeof(int));
 
-    dados.distTotal = 0;
+    dados.distTotal = 0;  
 
     // faz a busca pela solução atráves do vizinho mais próximo
     k = 0;
     while(premioAlcancado <= premioMinimo)
     {
+    
         distancia = 1000000;
         distanciaMaior = -1;
         for (j = 0; j < dados.qtdCidades; j++)
         {
+               
             if (dados.matrizDistancia[dados.vetSolucao[k]][j] < distancia && dados.vetSolucao[k] != j && selecionada[j] == 0)
             {
+                printf("k= %d\n", k);  
                 distancia = dados.matrizDistancia[dados.vetSolucao[k]][j];
                 aux = j;
             }
             if (dados.matrizDistancia[dados.vetSolucao[k]][j] > distanciaMaior && dados.vetSolucao[k] != j && selecionada[j] == 0)
             {
+                printf("k2= %d\n", k);  
                 distanciaMaior = dados.matrizDistancia[dados.vetSolucao[k]][j];
                 aux2 = j;
             }
@@ -119,7 +123,7 @@ int vizinhoGRASP(int inicio, int l, Dados dados, int* selecionada, float FOStar,
 
         candidatos[0] = aux;
 
-        //distanciaMaior /= 4;
+        distanciaMaior /= 4;
 
         if (distanciaMaior < distancia)
         {
@@ -153,6 +157,7 @@ int vizinhoGRASP(int inicio, int l, Dados dados, int* selecionada, float FOStar,
             candidatos[j] = 0;
         }
         index = 1;
+        printf("k grasp2= %d\n", k);
     }
 
     // distancia entre a última e a primeira cidade
@@ -187,6 +192,7 @@ float insercaoMaisBarata(Dados dados, int* selecionada, int indice){
     float distanciaInsercao, distancia = 9999999;
     int aux, aux2, flag = 0;
     k = indice;
+   
     do
     {
         flag = 0;
@@ -226,7 +232,7 @@ float insercaoMaisBarata(Dados dados, int* selecionada, int indice){
                 }
             }   
         }
-        printf("%d %d %d\n",aux, aux2, flag);
+        //printf("%d %d %d\n",aux, aux2, flag);
         if(selecionada[aux2] == 0 && flag ==1)
         {
                     
@@ -242,7 +248,6 @@ float insercaoMaisBarata(Dados dados, int* selecionada, int indice){
         }
                 
     }while(flag == 1);
-    printf("saiu\n");
 
     return dados.distTotal;
 }
@@ -810,7 +815,7 @@ float remocaoMaisBarata(Dados dados, int* selecionada, float premioAlcancado, fl
                 }
             }   
         }
-        printf("%d %d %d\n",aux, aux2, flag);
+        //printf("%d %d %d\n",aux, aux2, flag);
         if(selecionada[aux2] == 1 && flag == 1 && (premioAlcancado -= dados.vetPremio[aux2] > premioMinimo))
         {
             premioAlcancado -= dados.vetPremio[aux2];
@@ -877,8 +882,7 @@ int main(int argc, char *argv[ ])
        premioMinimo *= 0.75; ///Premio minimo é 75% do premio total
         comeco = clock();
         // for que percorre todas as cidades em busca da melhor solução
-       // for (int l = 0; l < dados.qtdCidades; l++){
-            int l = 0;
+        for (int l = 0; l < dados.qtdCidades; l++){
             k = vizinhoGRASP(inicio,l,dados,selecionada,FOStar,alfa,premioMinimo);
             FOStar = 0;
 
@@ -924,7 +928,8 @@ int main(int argc, char *argv[ ])
                     FOStar += dados.vetPenalidade[i];
                 }
             }
-
+            
+/*
             FOStar = remocaoMaisBarata(dados,selecionada,premioAlcancado,premioMinimo,k);
 
             FOStar = 0;
@@ -944,14 +949,12 @@ int main(int argc, char *argv[ ])
                 {
                     FOStar += dados.vetPenalidade[i];
                 }
-            }
+            }  
+*/
 
-
-
-            
-
-       // }
-
+        }
+        
+printf("k = %d\n", k);
         fim = clock();
         tempo = (double)(fim - inicio)/(double)CLOCKS_PER_SEC;
     }
@@ -961,10 +964,10 @@ int main(int argc, char *argv[ ])
     //printf("Solucao Otima: %f \n", solucaoOtima);
     //printf("GAP: %f \n", (100*(FOStarMulti-solucaoOtima)/solucaoOtima));
     printf("Tempo: %f\n", tempo);
-    /*for (i = 0; i < k; ++i)
+    for (i = 0; i < k; ++i)
     {
         printf("%d ", dados.vetSolucaoStar[i]);
-    }*/
+    }
 
     fclose(arq);
     //free(selecionada);
