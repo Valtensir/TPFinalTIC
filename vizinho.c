@@ -108,14 +108,12 @@ int vizinhoGRASP(int inicio, int l, Dados dados, int* selecionada, float FOStar,
         {
                
             if (dados.matrizDistancia[dados.vetSolucao[k]][j] < distancia && dados.vetSolucao[k] != j && selecionada[j] == 0)
-            {
-                printf("k= %d\n", k);  
+            { 
                 distancia = dados.matrizDistancia[dados.vetSolucao[k]][j];
                 aux = j;
             }
             if (dados.matrizDistancia[dados.vetSolucao[k]][j] > distanciaMaior && dados.vetSolucao[k] != j && selecionada[j] == 0)
             {
-                printf("k2= %d\n", k);  
                 distanciaMaior = dados.matrizDistancia[dados.vetSolucao[k]][j];
                 aux2 = j;
             }
@@ -157,7 +155,6 @@ int vizinhoGRASP(int inicio, int l, Dados dados, int* selecionada, float FOStar,
             candidatos[j] = 0;
         }
         index = 1;
-        printf("k grasp2= %d\n", k);
     }
 
     // distancia entre a última e a primeira cidade
@@ -179,11 +176,9 @@ int vizinhoGRASP(int inicio, int l, Dados dados, int* selecionada, float FOStar,
 
     for (i = 0; i < dados.qtdCidades; i++)
     {
-        selecionada[i] = 0;
         dados.vetSolucao[i] = 0;
     }
     dados.distTotal = 0;
-
     return k;
 }
 
@@ -411,7 +406,7 @@ float orOptBest (Dados dados, float FOStar){
     int *solucaoAtual = (int *)malloc(dados.qtdCidades * sizeof(int));
     float FOvizinho = 0, FOatual = FOStar, FOmelhorvizinho = FOStar;
     int melhoria = 0, retirada, inserida, ref1, ref2, aux;
-    for (i = 0; i < dados.qtdCidades; i++)
+    for (i = 0; i < k; i++)
     {
         solucaoAtual[i] = dados.vetSolucaoStar[i]; //salvando melhor vizinho
     }
@@ -419,20 +414,20 @@ float orOptBest (Dados dados, float FOStar){
     while(melhoria == 0)
     {
         melhoria = 1;
-        for (int i = 1; i < dados.qtdCidades-1; ++i)
+        for (int i = 1; i < k-1; ++i)
         {
-            for (int j = i+1; j < dados.qtdCidades; ++j)
+            for (int j = i+1; j < k; ++j)
             {
                 aux = solucaoAtual[i];
                 solucaoAtual[i] = solucaoAtual[j];
                 solucaoAtual[j] = aux;
 
-                for (int k = 0; k < dados.qtdCidades - 1; k++)
+                for (int l = 0; l < k - 1; l++)
                 {
-                    FOvizinho += dados.matrizDistancia[solucaoAtual[k]][solucaoAtual[k+1]];
+                    FOvizinho += dados.matrizDistancia[solucaoAtual[l]][solucaoAtual[l+1]];
                 }
 
-                FOvizinho += dados.matrizDistancia[solucaoAtual[0]][solucaoAtual[dados.qtdCidades-1]];
+                FOvizinho += dados.matrizDistancia[solucaoAtual[0]][solucaoAtual[k]];
 
 
                 if(FOvizinho < FOmelhorvizinho)
@@ -454,7 +449,7 @@ float orOptBest (Dados dados, float FOStar){
     }
 
     FOStar = FOatual;
-    for (i = 0; i < dados.qtdCidades; i++)
+    for (i = 0; i < k; i++)
     {
         dados.vetSolucaoStar[i] = solucaoAtual[i];
     }
@@ -471,7 +466,7 @@ float VND(Dados dados, float FOStarMulti, int* solucaoUm)
         {
             case 1:
 
-                for (i = 0; i < dados.qtdCidades; i++)
+                for (i = 0; i < k; i++)
                 {
                     solucaoUm[i] = dados.vetSolucaoStar[i];
                 }
@@ -481,7 +476,7 @@ float VND(Dados dados, float FOStarMulti, int* solucaoUm)
                     FOStarMulti = FOVND;
                     buscaLocal = 1;
                 } else {
-                    for (i = 0; i < dados.qtdCidades; i++)
+                    for (i = 0; i < k; i++)
                     {
                         dados.vetSolucaoStar[i] = solucaoUm[i];
                     }
@@ -491,7 +486,7 @@ float VND(Dados dados, float FOStarMulti, int* solucaoUm)
 
             case 2:
 
-                for (i = 0; i < dados.qtdCidades; i++)
+                for (i = 0; i < k; i++)
                 {
                     solucaoUm[i] = dados.vetSolucaoStar[i];
                 }
@@ -501,7 +496,7 @@ float VND(Dados dados, float FOStarMulti, int* solucaoUm)
                     FOStarMulti = FOVND;
                     buscaLocal = 1;
                 } else {
-                    for (i = 0; i < dados.qtdCidades; i++)
+                    for (i = 0; i < k; i++)
                     {
                         dados.vetSolucaoStar[i] = solucaoUm[i];
                     }
@@ -511,7 +506,7 @@ float VND(Dados dados, float FOStarMulti, int* solucaoUm)
 
             case 3:
 
-                for (i = 0; i < dados.qtdCidades; i++)
+                for (i = 0; i < k; i++)
                 {
                     solucaoUm[i] = dados.vetSolucaoStar[i];
                 }
@@ -521,7 +516,7 @@ float VND(Dados dados, float FOStarMulti, int* solucaoUm)
                     FOStarMulti = FOVND;
                     buscaLocal = 1;
                 } else {
-                    for (i = 0; i < dados.qtdCidades; i++)
+                    for (i = 0; i < k; i++)
                     {
                         dados.vetSolucaoStar[i] = solucaoUm[i];
                     }
@@ -531,7 +526,7 @@ float VND(Dados dados, float FOStarMulti, int* solucaoUm)
 
             case 4:
 
-                for (i = 0; i < dados.qtdCidades; i++)
+                for (i = 0; i < k; i++)
                 {
                     solucaoUm[i] = dados.vetSolucaoStar[i];
                 }
@@ -541,7 +536,7 @@ float VND(Dados dados, float FOStarMulti, int* solucaoUm)
                     FOStarMulti = FOVND;
                     buscaLocal = 1;
                 } else {
-                    for (i = 0; i < dados.qtdCidades; i++)
+                    for (i = 0; i < k; i++)
                     {
                         dados.vetSolucaoStar[i] = solucaoUm[i];
                     }
@@ -830,7 +825,6 @@ float remocaoMaisBarata(Dados dados, int* selecionada, float premioAlcancado, fl
         }
                 
     }while(flag == 1);
-    printf("saiu\n");
 
     return dados.distTotal;
 }
@@ -899,19 +893,11 @@ int main(int argc, char *argv[ ])
                 {
                     FOStar += dados.vetPenalidade[i];
                 }
-            }
-            
-
-            /*for (i = 0; i < k; ++i)
-            {
-                printf("%d ", dados.vetSolucaoStar[i]);
-            }
-            printf("\n");*/
+            }          
 
             FOStar = insercaoMaisBarata(dados,selecionada,k);
 
             FOStar = 0;
-            printf("k = %d\n", k);
 
             for (i = 0; i < k; ++i)
             {
@@ -928,12 +914,11 @@ int main(int argc, char *argv[ ])
                     FOStar += dados.vetPenalidade[i];
                 }
             }
-            
-/*
-            FOStar = remocaoMaisBarata(dados,selecionada,premioAlcancado,premioMinimo,k);
+
+            //FOStar = VND(dados,FOStar,solucaoUm);
+           /* FOStar = remocaoMaisBarata(dados,selecionada,premioAlcancado,premioMinimo,k);
 
             FOStar = 0;
-            printf("k = %d\n", k);
 
             for (i = 0; i < k; ++i)
             {
@@ -949,12 +934,14 @@ int main(int argc, char *argv[ ])
                 {
                     FOStar += dados.vetPenalidade[i];
                 }
-            }  
-*/
+            }  */
 
+            for (i = 0; i < dados.qtdCidades; i++)
+            {
+                selecionada[i] = 0;
+            }
         }
         
-printf("k = %d\n", k);
         fim = clock();
         tempo = (double)(fim - inicio)/(double)CLOCKS_PER_SEC;
     }
@@ -964,7 +951,7 @@ printf("k = %d\n", k);
     //printf("Solucao Otima: %f \n", solucaoOtima);
     //printf("GAP: %f \n", (100*(FOStarMulti-solucaoOtima)/solucaoOtima));
     printf("Tempo: %f\n", tempo);
-    for (i = 0; i < k; ++i)
+    for (i = 0; i <= k; ++i)
     {
         printf("%d ", dados.vetSolucaoStar[i]);
     }
