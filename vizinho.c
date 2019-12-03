@@ -99,7 +99,7 @@ int vizinhoGRASP(int inicio, int l, Dados dados, int* selecionada, float FOStar,
 
     // faz a busca pela solução atráves do vizinho mais próximo
     k = 0;
-    while(premioAlcancado <= premioMinimo)
+    while(premioAlcancado < premioMinimo)
     {
     
         distancia = 1000000;
@@ -140,7 +140,8 @@ int vizinhoGRASP(int inicio, int l, Dados dados, int* selecionada, float FOStar,
         escolhido = rand() % index;
 
         dados.distTotal += dados.matrizDistancia[dados.vetSolucao[k]][candidatos[escolhido]];
-        dados.vetSolucao[k+1] = candidatos[escolhido];
+        k++;
+        dados.vetSolucao[k] = candidatos[escolhido];
 
         selecionada[candidatos[escolhido]] = 1;
         premioAlcancado = 0;
@@ -148,7 +149,7 @@ int vizinhoGRASP(int inicio, int l, Dados dados, int* selecionada, float FOStar,
         {
             premioAlcancado += dados.vetPremio[j];
         }
-        k++;
+        
 
         for (j = 0; j < dados.qtdCidades; j++)
         {
@@ -219,7 +220,7 @@ int insercaoMaisBarata(Dados dados, int* selecionada, int indice){
             }   
         }
         
-        if(selecionada[aux2] == 0 && flag ==1)
+        if(selecionada[aux2] == 0 && flag == 1)
         {
                     
             dados.distTotal += distancia;
@@ -244,7 +245,7 @@ float doisOptBest(Dados dados, float FOStar){
         float FOvizinho, FOatual = FOStar, FOmelhorvizinho = FOStar;
         for (i = 0; i <= k; i++)
         {
-          solucaoAtual[i] = dados.vetSolucaoStar[i]; //salvando melhor vizinho
+          solucaoAtual[i] = dados.vetSolucao[i]; //salvando melhor vizinho
         }
         int ref1, ref2;
         int melhoria = 0;
@@ -269,7 +270,7 @@ float doisOptBest(Dados dados, float FOStar){
             if(melhoria == 0){
                 int aux2 = 0;
                 int n_trocas = ceil((ref2-ref1)/2);
-                for(int aux2=0; aux2<=n_trocas;aux2++){
+                for(int aux2 = 0; aux2 <= n_trocas; aux2++){
                     int aux = solucaoAtual[ref1+aux2];
                     solucaoAtual[ref1+aux2] = solucaoAtual[ref2-aux2];
                     solucaoAtual[ref2-aux2] = aux;
@@ -281,7 +282,7 @@ float doisOptBest(Dados dados, float FOStar){
         FOStar = FOatual;
         for (i = 0; i <= k; i++)
         {
-            dados.vetSolucaoStar[i] = solucaoAtual[i];
+            dados.vetSolucao[i] = solucaoAtual[i];
 
         }
         return FOStar;
@@ -293,15 +294,15 @@ float doisOptFirst(Dados dados, float FOStar){
         float FOvizinho, FOatual = FOStar, FOmelhorvizinho = FOStar;
         for (i = 0; i <= k; i++)
         {
-          solucaoAtual[i] = dados.vetSolucaoStar[i]; //salvando melhor vizinho
+          solucaoAtual[i] = dados.vetSolucao[i]; //salvando melhor vizinho
         }
         int ref1, ref2;
         int melhoria = 0;
         float retirada, inserida;
         while(melhoria == 0){
             melhoria = 1;
-            for(int i=1; i< k-1; i++){
-                for(int j=i+1; j< k-1; j++){
+            for(int i = 1; i< k-1; i++){
+                for(int j = i+1; j< k-1; j++){
                     retirada = dados.matrizDistancia[solucaoAtual[i-1]][solucaoAtual[i]] + dados.matrizDistancia[solucaoAtual[j]][solucaoAtual[j+1]];
                     inserida = dados.matrizDistancia[solucaoAtual[i]][solucaoAtual[j+1]] + dados.matrizDistancia[solucaoAtual[i-1]][solucaoAtual[j]];
                     FOvizinho = FOatual - retirada + inserida;
@@ -331,7 +332,7 @@ float doisOptFirst(Dados dados, float FOStar){
         FOStar = FOatual;
         for (i = 0; i <= k; i++)
         {
-            dados.vetSolucaoStar[i] = solucaoAtual[i];
+            dados.vetSolucao[i] = solucaoAtual[i];
 
         }
         return FOStar;
@@ -341,23 +342,17 @@ float orOptFirst (Dados dados, float FOStar){
     int *solucaoAtual = (int *)malloc(dados.qtdCidades * sizeof(int));
     float FOvizinho = 0, FOatual = FOStar, FOmelhorvizinho = FOStar;
     int melhoria = 0, retirada, inserida, ref1, ref2, aux;
-    for (i = 0; i < k; i++)
+    for (i = 0; i <= k; i++)
     {
-        solucaoAtual[i] = dados.vetSolucaoStar[i]; //salvando melhor vizinho
+        solucaoAtual[i] = dados.vetSolucao[i]; //salvando melhor vizinho
     }
-    for (i = 0; i <=k; i++)
-    {
-        printf("%d ",solucaoAtual[i]);
-    }
-    printf("\n");
     
-
     while(melhoria == 0)
     {
         melhoria = 1;
         for (i = 1; i < k; ++i)
         {
-            for (j = i+1; j < k; ++j)
+            for (j = i+1; j <= k; ++j)
             {
                 aux = solucaoAtual[i];
                 solucaoAtual[i] = solucaoAtual[j];
@@ -392,9 +387,9 @@ float orOptFirst (Dados dados, float FOStar){
     }
 
     FOStar = FOatual;
-    for (i = 0; i < k; i++)
+    for (i = 0; i <= k; i++)
     {
-        dados.vetSolucaoStar[i] = solucaoAtual[i];
+        dados.vetSolucao[i] = solucaoAtual[i];
     }
     return FOStar;
 }
@@ -831,7 +826,7 @@ int main(int argc, char *argv[ ])
     FILE *arq2;
     Dados dados;
     int aux, inicio,  k, c = 0, iter = 0, buscaLocal;
-    float distancia, FOStar = 99999999, solucaoOtima,x, y, FOStarMulti = 9999999, alfa = 0.2, FOdeS, FOPerturbacao, premioMinimo = 0, premioAlcancado = 0;
+    float distancia, FOStar = 99999999, solucaoOtima,x, y, FOStarMulti = 9999999, alfa = 0.2, FOdeS, FOPerturbacao, premioMinimo = 0, premioAlcancado = 0, premioTotal = 0;
     int *melhorSolucaoMulti;
     int *solucaoUm;
     int *selecionada;
@@ -839,7 +834,7 @@ int main(int argc, char *argv[ ])
     clock_t comeco, fim;
     double tempo;
 
-    arq = fopen("Instancias/v10.txt", "r");
+    arq = fopen("Instancias/v30c.txt", "r");
 
     if (arq == NULL)
     {
@@ -868,7 +863,7 @@ int main(int argc, char *argv[ ])
            selecionada[i] = 0;
            premioMinimo += dados.vetPremio[i];
        }
-
+        premioTotal = premioMinimo;
        premioMinimo *= 0.75; ///Premio minimo é 75% do premio total
         comeco = clock();
         // for que percorre todas as cidades em busca da melhor solução
@@ -891,25 +886,6 @@ int main(int argc, char *argv[ ])
                 }
             }          
 
-            k = insercaoMaisBarata(dados,selecionada,k);
-            dados.distTotal = 0;
-
-            for (i = 0; i < k; ++i)
-            {
-                dados.distTotal += dados.matrizDistancia[dados.vetSolucao[i]][dados.vetSolucao[i+1]];
-                premioAlcancado += dados.vetPremio[i];
-            }
-
-            dados.distTotal += dados.matrizDistancia[dados.vetSolucao[0]][dados.vetSolucao[k]];
-
-            for (i = 0; i < dados.qtdCidades; ++i)
-            {
-                if (selecionada[i] == 0)
-                {
-                    FOStar += dados.vetPenalidade[i];
-                }
-            }
-
             k = remocaoMaisBarata(dados,selecionada,premioAlcancado,premioMinimo,k);
             
             dados.distTotal = 0;
@@ -928,8 +904,28 @@ int main(int argc, char *argv[ ])
                 {
                     dados.distTotal += dados.vetPenalidade[i];
                 }
-            } 
+            }
+
+            k = insercaoMaisBarata(dados,selecionada,k);
+            dados.distTotal = 0;
+
+            for (i = 0; i < k; ++i)
+            {
+                dados.distTotal += dados.matrizDistancia[dados.vetSolucao[i]][dados.vetSolucao[i+1]];
+                premioAlcancado += dados.vetPremio[i];
+            }
+
+            dados.distTotal += dados.matrizDistancia[dados.vetSolucao[0]][dados.vetSolucao[k]];
+
+            for (i = 0; i < dados.qtdCidades; ++i)
+            {
+                if (selecionada[i] == 0)
+                {
+                    dados.distTotal += dados.vetPenalidade[i];
+                }
+            }
             
+            //dados.distTotal = VND(dados,dados.distTotal,solucaoUm);
 
             if (dados.distTotal < FOStar)
             {
@@ -946,6 +942,7 @@ int main(int argc, char *argv[ ])
                 dados.vetSolucao[i] = 0;
             }
             dados.distTotal = 0;
+            premioAlcancado = 0;
         }
         
         fim = clock();
