@@ -566,8 +566,8 @@ int main(int argc, char *argv[ ])
     FILE *arq2;
     Dados dados;
     int aux, inicio,  k, c = 0, iter = 0, buscaLocal;
-    float distancia, FOStar = 99999999, solucaoOtima,x, y, FOStarMulti = 9999999, alfa = 0.1, FOdeS;
-    float FOPerturbacao, premioMinimo = 0, premioAlcancado = 0;
+    float distancia, FOStar = 99999999, solucaoOtima,x, y, FOStarMulti = 9999999, alfa = 0.2, FOdeS;
+    float FOPerturbacao, premioMinimo = 0, premioAlcancado = 0, premioTotal = 0;
     int *melhorSolucaoMulti;
     int *solucaoUm;
     int *selecionada;
@@ -575,7 +575,7 @@ int main(int argc, char *argv[ ])
     clock_t comeco, fim;
     double tempo;
 
-    arq = fopen("Instancias/v10.txt", "r");
+    arq = fopen(argv[1], "r");
 
     if (arq == NULL)
     {
@@ -604,6 +604,7 @@ int main(int argc, char *argv[ ])
            selecionada[i] = 0;
            premioMinimo += dados.vetPremio[i];
        }
+        premioTotal = premioMinimo;
        premioMinimo *= 0.75; ///Premio minimo é 75% do premio total
         comeco = clock();
         // for que percorre todas as cidades em busca da melhor solução
@@ -706,6 +707,7 @@ int main(int argc, char *argv[ ])
         tempo = (double)(fim - inicio)/(double)CLOCKS_PER_SEC;
     }
     printf("\n***********************************************************************\n");
+    printf("Arquivo: %s\n", argv[1]);
     printf("Solucao encontrada: %f\n", FOStar);
     //printf("Solucao Otima: %f \n", solucaoOtima);
     //printf("GAP: %f \n", (100*(FOStarMulti-solucaoOtima)/solucaoOtima));
