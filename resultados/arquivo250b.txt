@@ -1,0 +1,60 @@
+Solucao encontrada:             16385.00
+Tempo:             -4114.81
+Solucao encontrada:             16181.00
+Tempo:             -4112.14
+Solucao encontrada:             16462.00
+Tempo:             -4108.38
+Solucao encontrada:             16427.00
+Tempo:             -4115.62
+Solucao encontrada:             16500.00
+Tempo:             -4115.70
+Solucao encontrada:             16306.00
+Tempo:             -4119.22
+Solucao encontrada:             16431.00
+Tempo:             -4117.25
+Solucao encontrada:             16430.00
+Tempo:             -4112.34
+Solucao encontrada:             16326.00
+Tempo:             -4099.17
+Solucao encontrada:             16244.00
+Tempo:             -4117.27
+Solucao encontrada:             16395.00
+Tempo:             -4118.63
+Solucao encontrada:             16247.00
+Tempo:             -4112.66
+Solucao encontrada:             16351.00
+Tempo:             -4108.72
+Solucao encontrada:             16474.00
+Tempo:             -4117.78
+Solucao encontrada:             16347.00
+Tempo:             -4117.33
+Solucao encontrada:             16397.00
+Tempo:             -4106.21
+Solucao encontrada:             16211.00
+Tempo:             -4108.04
+Solucao encontrada:             16448.00
+Tempo:             -4113.01
+Solucao encontrada:             16206.00
+Tempo:             -4116.27
+Solucao encontrada:             16448.00
+Tempo:             -4117.97
+Solucao encontrada:             16494.00
+Tempo:             -4117.02
+Solucao encontrada:             16401.00
+Tempo:             -4115.09
+Solucao encontrada:             16388.00
+Tempo:             -4119.97
+Solucao encontrada:             16399.00
+Tempo:             -4049.00
+Solucao encontrada:             16344.00
+Tempo:             -4056.80
+Solucao encontrada:             16434.00
+Tempo:             -4105.74
+Solucao encontrada:             16309.00
+Tempo:             -4111.95
+Solucao encontrada:             16456.00
+Tempo:             -4116.51
+Solucao encontrada:             16443.00
+Tempo:             -4112.85
+Solucao encontrada:             16296.00
+Tempo:             -4116.78

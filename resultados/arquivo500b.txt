@@ -1,0 +1,16 @@
+Solucao encontrada:             30568.00
+Tempo:             -2855.61
+Solucao encontrada:             30583.00
+Tempo:             -3228.72
+Solucao encontrada:             30767.00
+Tempo:             -3408.29
+Solucao encontrada:             30724.00
+Tempo:             -3397.40
+Solucao encontrada:             30643.00
+Tempo:             -3373.53
+Solucao encontrada:             30751.00
+Tempo:             -3412.70
+Solucao encontrada:             30666.00
+Tempo:             -3356.20
+Solucao encontrada:             30680.00
+Tempo:              8240.01
