@@ -103,7 +103,7 @@ int vizinhoGRASP(int inicio, int l, Dados dados, int* selecionada, float FOStar,
         premioAlcancado = 0;
         for (j = 0; j <= k; j++)
         {
-            premioAlcancado += dados.vetPremio[j];
+            premioAlcancado += dados.vetPremio[dados.vetSolucao[j]];
         }
 
 
@@ -510,7 +510,7 @@ int remocaoMaisBarata(Dados dados, int* selecionada, float premioAlcancado, floa
         aux = -1;
         aux2 = -1;
 
-        for(i = 0; i < dados.qtdCidades; i++)
+        for(i = 0; i < k; i++)
         {
             if (selecionada[dados.vetSolucao[i]] == 1)
             {
@@ -634,7 +634,7 @@ int main(int argc, char *argv[ ])
             for (i = 0; i < k; ++i)
             {
                 dados.distTotal += dados.matrizDistancia[dados.vetSolucao[i]][dados.vetSolucao[i+1]];
-                premioAlcancado += dados.vetPremio[i];
+                premioAlcancado += dados.vetPremio[dados.vetSolucao[i]];
             }
 
             dados.distTotal += dados.matrizDistancia[dados.vetSolucao[0]][dados.vetSolucao[k]];
@@ -653,7 +653,7 @@ int main(int argc, char *argv[ ])
             for (i = 0; i < k; ++i)
             {
                 dados.distTotal += dados.matrizDistancia[dados.vetSolucao[i]][dados.vetSolucao[i+1]];
-                premioAlcancado += dados.vetPremio[i];
+                premioAlcancado += dados.vetPremio[dados.vetSolucao[i]];
             }
 
             dados.distTotal += dados.matrizDistancia[dados.vetSolucao[0]][dados.vetSolucao[k]];
